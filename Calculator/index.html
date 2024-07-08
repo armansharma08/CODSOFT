@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="calculator">
+        <div class="calculator-screen" id="calculator-screen">0</div>
+        <div class="calculator-buttons">
+            <button class="btn" onclick="clearScreen()">C</button>
+            <button class="btn" onclick="deleteDigit()">DEL</button>
+            <button class="btn" onclick="appendOperator('%')">%</button>
+            <button class="btn operator" onclick="appendOperator('/')">/</button>
+            <button class="btn" onclick="appendNumber('7')">7</button>
+            <button class="btn" onclick="appendNumber('8')">8</button>
+            <button class="btn" onclick="appendNumber('9')">9</button>
+            <button class="btn operator" onclick="appendOperator('*')">*</button>
+            <button class="btn" onclick="appendNumber('4')">4</button>
+            <button class="btn" onclick="appendNumber('5')">5</button>
+            <button class="btn" onclick="appendNumber('6')">6</button>
+            <button class="btn operator" onclick="appendOperator('-')">-</button>
+            <button class="btn" onclick="appendNumber('1')">1</button>
+            <button class="btn" onclick="appendNumber('2')">2</button>
+            <button class="btn" onclick="appendNumber('3')">3</button>
+            <button class="btn operator" onclick="appendOperator('+')">+</button>
+            <button class="btn zero" onclick="appendNumber('0')">0</button>
+            <button class="btn" onclick="appendDot()">.</button>
+            <button class="btn equal" onclick="calculateResult()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let screen = document.getElementById('calculator-screen');
+        let currentInput = '';
+        let previousInput = '';
+        let operator = '';
+
+        function clearScreen() {
+            currentInput = '';
+            previousInput = '';
+            operator = '';
+            screen.innerText = '0';
+        }
+
+        function deleteDigit() {
+            currentInput = currentInput.toString().slice(0, -1);
+            screen.innerText = currentInput || '0';
+        }
+
+        function appendNumber(number) {
+            currentInput += number;
+            screen.innerText = currentInput;
+        }
+
+        function appendOperator(op) {
+            if (currentInput === '') return;
+            if (previousInput !== '') {
+                calculateResult();
+            }
+            operator = op;
+            previousInput = currentInput;
+            currentInput = '';
+        }
+
+        function appendDot() {
+            if (currentInput.includes('.')) return;
+            currentInput += '.';
+            screen.innerText = currentInput;
+        }
+
+        function calculateResult() {
+            let result;
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+            if (isNaN(prev) || isNaN(current)) return;
+
+            switch (operator) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    result = prev / current;
+                    break;
+                case '%':
+                    result = prev % current;
+                    break;
+                default:
+                    return;
+            }
+
+            currentInput = result;
+            operator = '';
+            previousInput = '';
+            screen.innerText = result;
+        }
+    </script>
+</body>
+
+</html>
